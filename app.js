@@ -345,6 +345,16 @@
       .then(async (response) => { const data = await response.json(); showMessage(response.ok ? 'Question added.' : (data.error || 'Could not add question'), !response.ok); });
   }
 
+  function updateIstClock() {
+    const clock = document.getElementById('ist-clock');
+    if (!clock) return;
+    clock.textContent = 'IST: ' + new Intl.DateTimeFormat('en-IN', {
+      timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
+    }).format(new Date());
+  }
+  updateIstClock();
+  setInterval(updateIstClock, 1000);
+
   auth.onAuthStateChanged((user) => {
     if (user) {
       const isAdmin = isAdminEmail(user.email);

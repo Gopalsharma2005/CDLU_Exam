@@ -21,17 +21,25 @@ body {
 button, input { font: inherit; }
 
 .topbar {
-  height: 82px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 24px;
-  background: rgba(255,255,255,.92);
-  border-bottom: 1px solid var(--border);
+  height: auto;
+  background: #082f49;
+  border-bottom: 2px solid #f59e0b;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  box-shadow: 0 8px 24px rgba(15,23,42,.18);
 }
+.top-strip { min-height: 30px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 5px 24px; background: linear-gradient(90deg, #b45309, #d97706, #b45309); color: #fff7ed; font-size: 12px; }
+.live-dot { display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: #34d399; box-shadow: 0 0 8px #34d399; }
+.ist-clock { font-family: Consolas, monospace; font-size: 11px; }
+.brand-banner { min-height: 82px; display: flex; align-items: center; gap: 14px; padding: 10px 24px; }
 .logo { width: 58px; height: 58px; object-fit: contain; }
-.university-name { margin: 0; color: var(--green-deep); font-size: 20px; }
-.university-subtitle { margin: 3px 0 0; color: var(--sky-deep); font-size: 13px; }
+.brand-copy { min-width: 0; }
+.motto { display: inline-block; margin-bottom: 2px; color: #fcd34d; border: 1px solid rgba(252,211,77,.35); border-radius: 999px; padding: 2px 8px; font-size: 10px; }
+.university-name { margin: 0; color: #fff; font-size: 20px; letter-spacing: .2px; }
+.university-subtitle { margin: 3px 0 0; color: #fcd34d; font-size: 13px; }
+.khanda { margin-right: 4px; }
 
 .page {
   min-height: calc(100vh - 82px);
@@ -130,17 +138,25 @@ button:disabled { opacity: .65; cursor: wait; }
 .exam-toolbar { display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 2; margin-bottom: 12px; padding: 12px; border: 1px solid #ccebd6; border-radius: 10px; background: #fff; }
 #exam-timer { color: #9f1239; font-weight: 900; }
 .question-card { display: grid; gap: 8px; margin-bottom: 12px; border: 1px solid #d7eadf; border-radius: 12px; padding: 14px; }
-.question-card label { display: flex; gap: 8px; align-items: center; }
+ .question-card label { display: flex; gap: 8px; align-items: center; }
+.portal-footer { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: auto; padding: 18px 24px; border-top: 2px solid #d97706; background: #082f49; color: #e2e8f0; font-size: 12px; }
+.portal-footer div { display: flex; flex-direction: column; gap: 4px; }
+.portal-footer strong { color: #fcd34d; }
+.portal-footer span { color: #cbd5e1; }
 
 @media (max-width: 600px) {
-  .topbar { height: 74px; padding: 10px 14px; }
+  .topbar { height: auto; }
+  .top-strip { padding-inline: 12px; }
+  .ist-clock { display: none; }
+  .brand-banner { min-height: 74px; padding: 8px 12px; }
   .logo { width: 52px; height: 52px; }
   .university-name { font-size: 16px; }
   .university-subtitle { font-size: 11px; }
-  .page { min-height: calc(100vh - 74px); padding: 18px 12px; align-items: start; }
+  .page { min-height: calc(100vh - 144px); padding: 18px 12px; align-items: start; }
   .card-head { padding: 20px; }
   .form { padding: 18px 20px 22px; }
   .message { margin-inline: 20px; }
   .field-grid { grid-template-columns: 1fr; gap: 0; }
+  .portal-footer { grid-template-columns: 1fr; }
   .auth-card { width: min(980px, 100%); }
 }
