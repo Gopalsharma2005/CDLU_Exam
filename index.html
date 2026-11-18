@@ -60,6 +60,30 @@
             <label for="register-password">Create password</label>
             <input id="register-password" type="password" autocomplete="new-password" minlength="6" maxlength="128" required placeholder="At least 6 characters">
           </div>
+          <div class="field">
+            <label for="register-roll">Roll number</label>
+            <input id="register-roll" type="text" maxlength="50" required placeholder="University roll number">
+          </div>
+          <div class="field">
+            <label for="register-college">College / University</label>
+            <select id="register-college" required>
+              <option value="">Loading colleges...</option>
+            </select>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="register-course">Course</label>
+              <input id="register-course" type="text" maxlength="100" required placeholder="BCA, B.A., M.Sc.">
+            </div>
+            <div class="field">
+              <label for="register-semester">Semester</label>
+              <input id="register-semester" type="text" maxlength="30" required placeholder="4">
+            </div>
+          </div>
+          <div class="field">
+            <label for="register-phone">Phone number</label>
+            <input id="register-phone" type="tel" autocomplete="tel" maxlength="20" placeholder="Optional">
+          </div>
           <button class="primary" type="submit">Create account</button>
           <div class="divider">OR</div>
           <button class="google google-button" type="button">
@@ -75,13 +99,28 @@
         <span id="user-role" class="role-badge">Student</span>
         <h3 id="user-name">CDLU Student</h3>
         <p id="user-email"></p>
-        <div id="student-dashboard" class="dashboard">
-          <div class="dashboard-card"><strong>Exams</strong><span>No exams scheduled</span></div>
-          <div class="dashboard-card"><strong>Results</strong><span>Results will appear here</span></div>
+        <div id="student-dashboard" class="dashboard student-dashboard">
+          <section class="panel"><h4>Available Exams</h4><div id="exam-list" class="exam-list"><p>Loading exams...</p></div></section>
         </div>
-        <div id="admin-dashboard" class="dashboard">
-          <div class="dashboard-card"><strong>Student accounts</strong><span>Firebase users</span></div>
-          <div class="dashboard-card"><strong>Administration</strong><span>Manage from Firebase Console</span></div>
+        <div id="admin-dashboard" class="dashboard admin-dashboard">
+          <section class="panel"><h4>Create Exam</h4>
+            <form id="exam-form" class="compact-form">
+              <input id="exam-title" required placeholder="Exam title">
+              <textarea id="exam-description" placeholder="Description"></textarea>
+              <select id="exam-college"><option value="">All colleges</option></select>
+              <input id="exam-course" placeholder="Course (optional)">
+              <input id="exam-semester" placeholder="Semester (optional)">
+              <input id="exam-start" type="datetime-local" required>
+              <input id="exam-duration" type="number" min="1" max="1440" value="60" required placeholder="Duration in minutes">
+              <button class="primary" type="submit">Create exam</button>
+            </form>
+          </section>
+          <section class="panel"><h4>Exams & Results</h4><div id="admin-exam-list" class="exam-list">Loading...</div></section>
+        </div>
+        <div id="exam-screen" class="exam-screen">
+          <div class="exam-toolbar"><strong id="exam-running-title"></strong><span id="exam-timer">00:00:00</span></div>
+          <div id="exam-running-questions"></div>
+          <button id="submit-exam" class="primary" type="button">Submit Exam</button>
         </div>
         <button id="logout-button" class="logout" type="button">Log out</button>
       </div>

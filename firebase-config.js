@@ -13,3 +13,5 @@ window.CDLU_FIREBASE_CONFIG = {
 // Browser-only role allowlist. The account itself must already exist in Firebase Authentication.
 // Keep this to one account. For production security, move role checks to Firebase custom claims.
 window.CDLU_ADMIN_EMAIL = 'admin@cdlu.ac.in';
+window.CDLU_SUPABASE_URL = 'https://jspfjnjhtwdugblvlxvv.supabase.co';
+window.CDLU_SUPABASE_ANON_KEY = 'REPLACE_WITH_SUPABASE_PUBLISHABLE_KEY';

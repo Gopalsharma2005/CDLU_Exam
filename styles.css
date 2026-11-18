@@ -69,7 +69,9 @@ button, input { font: inherit; }
 .form.active { display: block; }
 .field { margin-bottom: 14px; }
 .field label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; }
-.field input {
+ .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.field input,
+.field select {
   width: 100%;
   border: 1px solid #adddc0;
   border-radius: 12px;
@@ -78,7 +80,8 @@ button, input { font: inherit; }
   background: var(--white);
   outline: none;
 }
-.field input:focus { border-color: var(--sky-strong); box-shadow: 0 0 0 3px var(--sky); }
+.field select { width: 100%; border: 1px solid #adddc0; border-radius: 12px; padding: 12px 13px; color: var(--text); background: var(--white); }
+.field input:focus, .field select:focus { border-color: var(--sky-strong); box-shadow: 0 0 0 3px var(--sky); }
 .primary, .google {
   width: 100%;
   min-height: 46px;
@@ -108,7 +111,26 @@ button:disabled { opacity: .65; cursor: wait; }
 .dashboard { display: none; grid-template-columns: 1fr 1fr; gap: 10px; margin: 18px 0; }
 .dashboard-card { min-height: 90px; display: flex; flex-direction: column; justify-content: center; gap: 6px; border: 1px solid #ccebd6; border-radius: 12px; padding: 12px; background: linear-gradient(135deg, #fff, var(--green)); }
 .dashboard-card strong { color: var(--green-deep); }
-.dashboard-card span { color: #527487; font-size: 12px; }
+ .dashboard-card span { color: #527487; font-size: 12px; }
+.auth-card:has(.student-dashboard), .auth-card:has(.admin-dashboard) { width: min(980px, 100%); }
+.student-dashboard, .admin-dashboard { grid-template-columns: 1fr; }
+.admin-dashboard { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.panel { border: 1px solid #ccebd6; border-radius: 14px; padding: 16px; background: #fff; text-align: left; }
+.panel h4 { margin: 0 0 12px; }
+.compact-form { display: grid; gap: 9px; }
+.compact-form input, .compact-form textarea, .compact-form select { width: 100%; border: 1px solid #adddc0; border-radius: 9px; padding: 10px; }
+.compact-form textarea { min-height: 70px; resize: vertical; }
+.exam-list { display: grid; gap: 9px; }
+.exam-card { display: grid; gap: 5px; border: 1px solid #d7eadf; border-radius: 10px; padding: 12px; }
+.exam-card span, .exam-card small { color: #527487; }
+.secondary { border: 1px solid #adddc0; border-radius: 9px; padding: 8px 10px; background: var(--sky); color: var(--sky-deep); cursor: pointer; font-weight: 800; }
+.secondary:disabled { cursor: default; }
+.exam-screen { display: none; text-align: left; }
+.exam-screen.show { display: block; }
+.exam-toolbar { display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 2; margin-bottom: 12px; padding: 12px; border: 1px solid #ccebd6; border-radius: 10px; background: #fff; }
+#exam-timer { color: #9f1239; font-weight: 900; }
+.question-card { display: grid; gap: 8px; margin-bottom: 12px; border: 1px solid #d7eadf; border-radius: 12px; padding: 14px; }
+.question-card label { display: flex; gap: 8px; align-items: center; }
 
 @media (max-width: 600px) {
   .topbar { height: 74px; padding: 10px 14px; }
@@ -119,4 +141,6 @@ button:disabled { opacity: .65; cursor: wait; }
   .card-head { padding: 20px; }
   .form { padding: 18px 20px 22px; }
   .message { margin-inline: 20px; }
+  .field-grid { grid-template-columns: 1fr; gap: 0; }
+  .auth-card { width: min(980px, 100%); }
 }
