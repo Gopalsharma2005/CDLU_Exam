@@ -1,14 +1,21 @@
 {
-  "name": "cdlu-exam-portal",
+  "name": "cdlu-online-exam-portal",
   "version": "1.0.0",
-  "private": true,
+  "description": "Chaudhary Devi Lal University - Sri Guru Gobind Singh Ji Online Examination System",
   "scripts": {
-    "start": "node server/index.js",
-    "dev": "node --watch server/index.js"
+    "setup": "npm install --prefix server && npm install --prefix client",
+    "prestart": "npm run build",
+    "start": "node server/start.js",
+    "dev:server": "node --watch server/index.js",
+    "dev:client": "npm --prefix client run dev",
+    "build": "npm --prefix client run build && node scripts/sync-root.js"
   },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.49.1",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2"
-  }
+  "keywords": [
+    "cdlu",
+    "online-exam",
+    "guru-gobind-singh",
+    "exam-portal"
+  ],
+  "author": "CDLU Examination Centre",
+  "license": "ISC"
 }

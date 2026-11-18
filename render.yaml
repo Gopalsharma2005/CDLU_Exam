@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: cdlu-exam-api
+    runtime: node
+    plan: starter
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node index.js
+    disk:
+      name: cdlu-exam-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_PATH
+        value: /var/data/cdlu_exam.sqlite
+      - key: JWT_SECRET
+        sync: false
+      - key: INITIAL_ADMIN_PASSWORD
+        sync: false
+      - key: CORS_ORIGIN
+        value: ""

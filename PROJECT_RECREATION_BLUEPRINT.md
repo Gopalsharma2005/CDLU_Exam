@@ -1694,16 +1694,33 @@ Do not present offline mode as a secure production implementation.
 
 Use:
 
-- Slate primary text/background
-- Amber university/gold accent
-- Dark header and footer
-- Emerald success indicators
+- Sky-blue primary color
+- Light-green secondary color
+- White backgrounds and surfaces
+- Sky-blue borders, icons, gradients, focus states, and loading indicators
+- Light-green success badges, progress states, and accents
+- Dark navy/sky text for contrast
+- Sky-blue dark header and footer
 - Red destructive/lock indicators
 - Rounded cards
 - Mobile responsive layouts
 - Loading spinners
 - Clear error banners
 - Accessible buttons and labels
+
+Recommended Tailwind palette:
+
+```text
+Sky primary:     sky-500 / sky-600
+Sky background:  sky-50 / sky-100
+Sky dark:        sky-800 / sky-950
+Green accent:    green-300 / green-400
+Green background: green-50 / green-100
+Main surface:    white
+Primary text:    slate-900 / slate-700
+Secondary text:  slate-500 / slate-600
+Error:           red-500 / red-600
+```
 
 Include a CDLU/Sri Guru Gobind Singh Ji commemorative identity only if permitted by the final organization.
 
