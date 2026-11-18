@@ -28,7 +28,7 @@ export default function BannerHeader({ user, onLogout }) {
       <div className="bg-gradient-to-r from-sky-700/90 via-sky-600/90 to-sky-700/90 text-sky-50 text-xs py-1 px-4 font-medium tracking-wide flex justify-between items-center border-b border-sky-400/30">
         <div className="flex items-center gap-2">
           <span className="inline-block w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-          <span className="font-semibold">चौधरी देवी लाल विश्वविद्यालय, सिरसा (हरियाणा) | Chaudhary Devi Lal University, Sirsa</span>
+          <span className="font-semibold">Chaudhary Devi Lal University, Sirsa, Haryana</span>
         </div>
         <div className="hidden sm:flex items-center gap-2 font-mono text-[11px] text-sky-100">
           <Clock className="w-3.5 h-3.5 text-sky-300" />
@@ -36,7 +36,7 @@ export default function BannerHeader({ user, onLogout }) {
         </div>
       </div>
 
-      {/* Main Guru Gobind Singh Ji & CDLU Banner */}
+      {/* Main CDLU banner */}
       <div className="max-w-7xl mx-auto px-4 py-3 sm:py-3.5">
         <div className="flex flex-col md:flex-row items-center justify-between gap-3">
           
@@ -51,22 +51,18 @@ export default function BannerHeader({ user, onLogout }) {
               />
             </div>
 
-            {/* University & Sri Guru Gobind Singh Ji Title */}
+            {/* University title */}
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-400/30">
-                  ਨੈਤਿਕਤਾ • ਗਿਆਨ • ਸਮਰਪਣ
-                </span>
-                <span className="text-[11px] text-slate-300 hidden sm:inline font-serif italic">
-                  "ਮਾਨਸ ਕੀ ਜਾਤਿ ਸਭੈ ਏਕੈ ਪਹਿਚਾਨਬੋ"
+                  Knowledge • Integrity • Service
                 </span>
               </div>
               <h1 className="text-base sm:text-xl font-black text-white tracking-tight flex items-center gap-1.5 mt-0.5">
                 <span>CHAUDHARY DEVI LAL UNIVERSITY</span>
               </h1>
               <div className="flex items-center gap-1.5 mt-0.5 text-xs sm:text-sm font-semibold text-sky-400">
-                <span className="text-sky-400 text-sm">☬</span>
-                <span>Sri Guru Gobind Singh Ji Digital Examination Portal</span>
+                <span>Digital Examination Portal</span>
               </div>
             </div>
           </div>

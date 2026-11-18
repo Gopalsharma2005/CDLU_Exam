@@ -342,7 +342,7 @@ export default function StudentExamScreen({ exam, user, onExitExam, onLogout }) 
       <div className="min-h-screen bg-slate-900 flex flex-col justify-center items-center px-4 py-8 text-white">
         <div className="max-w-md w-full bg-sky-950 border-2 border-sky-500 rounded-3xl p-6 sm:p-8 text-center shadow-2xl relative overflow-hidden">
           
-          {/* Guru Gobind Singh Ji / CDLU Aura Banner */}
+          {/* University status banner */}
           <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-sky-400 via-sky-500 to-sky-600"></div>
 
           <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-sky-500/20 to-green-500/20 border-2 border-green-400 flex items-center justify-center mb-5 shadow-lg shadow-green-500/20">
@@ -441,7 +441,7 @@ export default function StudentExamScreen({ exam, user, onExitExam, onLogout }) 
           
           {/* Left: Exam Info & Question Counter */}
           <div className="flex items-center gap-2">
-            <span className="text-sky-400 font-black text-sm sm:text-base">☬</span>
+            <img src="./cdlu-logo.png" alt="CDLU" className="w-8 h-8 object-contain rounded-lg" />
             <div>
               <div className="text-[10px] sm:text-xs text-slate-400 font-medium truncate max-w-[150px] sm:max-w-xs">
                 {exam.code} • {exam.title}

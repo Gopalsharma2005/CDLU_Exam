@@ -200,12 +200,12 @@ export default function LoginScreen({ onLoginSuccess }) {
       {/* 2. CENTRAL GLASSMORPHISM CARD */}
       <div className="w-full max-w-xl bg-white/75 backdrop-blur-2xl rounded-3xl shadow-[0_20px_60px_rgba(15,23,42,0.1)] border border-white/80 overflow-hidden transition-all duration-300 z-10">
         
-        {/* Card Header with Guru Gobind Singh Ji Commemoration */}
+        {/* University portal header */}
         <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-green-950 text-white p-6 sm:p-7 text-center border-b-2 border-sky-500 relative overflow-hidden">
           <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-sky-500/10 rounded-full blur-xl pointer-events-none"></div>
 
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-500 to-sky-300 text-sky-950 font-black shadow-lg shadow-sky-500/30 mb-2.5">
-            <span className="text-2xl">☬</span>
+            <img src="./cdlu-logo.png" alt="CDLU logo" className="w-10 h-10 object-contain" />
           </div>
 
           <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
@@ -215,7 +215,7 @@ export default function LoginScreen({ onLoginSuccess }) {
           </h2>
 
           <p className="text-xs text-sky-300 mt-1 font-medium">
-            Chaudhary Devi Lal University, Sirsa • Sri Guru Gobind Singh Ji Centre
+            Chaudhary Devi Lal University, Sirsa
           </p>
 
           <div className="mt-3 text-[11px] text-slate-300 bg-white/10 backdrop-blur-md rounded-full px-3.5 py-1 inline-block border border-white/10 font-medium">

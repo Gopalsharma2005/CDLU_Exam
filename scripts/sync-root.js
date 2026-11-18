@@ -13,6 +13,7 @@ if (!fs.existsSync(distDir)) {
 const distAssets = path.join(distDir, 'assets');
 const rootAssets = path.join(rootDir, 'assets');
 if (fs.existsSync(distAssets)) {
+  if (fs.existsSync(rootAssets)) fs.rmSync(rootAssets, { recursive: true, force: true });
   fs.cpSync(distAssets, rootAssets, { recursive: true });
   console.log('[sync-root] Synced assets folder to root.');
 }
@@ -57,8 +58,8 @@ const standaloneHtml = `<!doctype html>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>CDLU Examination Portal | Sri Guru Gobind Singh Ji Digital Center</title>
-    <meta name="description" content="Chaudhary Devi Lal University, Sirsa - Online Examination Portal with Sri Guru Gobind Singh Ji Commemorative Centre" />
+    <title>CDLU Digital Examination Portal</title>
+    <meta name="description" content="Chaudhary Devi Lal University, Sirsa - Secure Digital Examination Portal" />
     <style>
 ${cssContent}
     </style>

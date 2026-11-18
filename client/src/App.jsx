@@ -77,7 +77,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-sky-50 flex flex-col font-sans relative selection:bg-sky-500 selection:text-sky-950">
-      {/* University & Sri Guru Gobind Singh Ji Commemorative Header */}
+      {/* University header */}
       <BannerHeader user={user} onLogout={handleLogout} />
 
       {/* Main Viewport */}
@@ -100,12 +100,10 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 text-xs leading-relaxed">
           
-          {/* Column 1: University Identity & Sri Guru Gobind Singh Ji Centre */}
+          {/* Column 1: University identity */}
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-sky-500 to-sky-300 flex items-center justify-center text-sky-950 font-black text-xl shadow-md">
-                <span>☬</span>
-              </div>
+              <img src="./cdlu-logo.png" alt="CDLU logo" className="w-11 h-11 rounded-xl object-contain shadow-md" />
               <div>
                 <h4 className="font-black text-white text-sm tracking-tight">CDLU SIRSA</h4>
                 <p className="text-[10px] text-sky-400 font-semibold">Chaudhary Devi Lal University</p>
@@ -115,7 +113,7 @@ export default function App() {
               Established by the State Legislature Act 9 of 2003. Accredited Grade 'B+' by NAAC. Dedicated to academic excellence, ethics, and integrity.
             </p>
             <div className="text-[10px] font-serif text-sky-200/90 italic bg-white/5 p-2 rounded-lg border border-white/10">
-              "ਮਾਨਸ ਕੀ ਜਾਤਿ ਸਭੈ ਏਕੈ ਪਹਿਚਾਨਬੋ" — Guru Gobind Singh Ji
+Committed to academic excellence, ethics, and integrity.
             </div>
           </div>
 
@@ -194,7 +192,7 @@ export default function App() {
 
         </div>
 
-        {/* Bottom Copyright & Commemorative Strip */}
+        {/* Bottom copyright strip */}
         <div className="max-w-7xl mx-auto pt-5 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500">
           <div>
             <span className="text-slate-400 font-bold">Chaudhary Devi Lal University (CDLU), Sirsa</span>
@@ -203,7 +201,7 @@ export default function App() {
           </div>
 
           <div className="text-sky-400/90 font-medium text-[10px] flex items-center gap-2">
-            <span>Sri Guru Gobind Singh Ji Commemorative Digital Portal</span>
+            <span>CDLU Digital Examination Portal</span>
             <span className="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
             <span>v2026.1 Enterprise</span>
           </div>

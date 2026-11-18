@@ -137,7 +137,7 @@ setInterval(() => {
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
-    portal: 'CDLU Sri Guru Gobind Singh Ji Examination Portal',
+    portal: 'CDLU Digital Examination Portal',
     serverTime: Date.now(),
     timestampIST: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
   });
@@ -159,7 +159,7 @@ app.use((req, res, next) => {
 app.listen(PORT, () => {
   console.log(`=======================================================`);
   console.log(` CDLU ONLINE EXAMINATION SYSTEM (SERVER RUNNING)`);
-  console.log(` Sri Guru Gobind Singh Ji Examination Centre`);
+  console.log(` CDLU Digital Examination Portal`);
   console.log(` Server active on: http://localhost:${PORT}`);
   console.log(`=======================================================`);
 });
