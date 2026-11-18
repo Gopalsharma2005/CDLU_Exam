@@ -110,19 +110,47 @@
           <section class="panel"><h4>Available Exams</h4><div id="exam-list" class="exam-list"><p>Loading exams...</p></div></section>
         </div>
         <div id="admin-dashboard" class="dashboard admin-dashboard">
-          <section class="panel"><h4>Create Exam</h4>
+          <nav class="admin-tabs" aria-label="Admin sections">
+            <button type="button" class="admin-tab active" data-admin-tab="exam">Exam Paper</button>
+            <button type="button" class="admin-tab" data-admin-tab="questions">Question Bank</button>
+            <button type="button" class="admin-tab" data-admin-tab="monitoring">Live Monitoring</button>
+            <button type="button" class="admin-tab" data-admin-tab="results">Results</button>
+          </nav>
+          <section id="admin-exam-section" class="admin-section active panel">
+            <h4>One-Paper Exam Setup</h4>
             <form id="exam-form" class="compact-form">
               <input id="exam-title" required placeholder="Exam title">
-              <textarea id="exam-description" placeholder="Description"></textarea>
-              <select id="exam-college"><option value="">All colleges</option></select>
-              <input id="exam-course" placeholder="Course (optional)">
-              <input id="exam-semester" placeholder="Semester (optional)">
+              <textarea id="exam-description" placeholder="Instructions for students"></textarea>
               <input id="exam-start" type="datetime-local" required>
-              <input id="exam-duration" type="number" min="1" max="1440" value="60" required placeholder="Duration in minutes">
-              <button class="primary" type="submit">Create exam</button>
+              <input id="exam-duration" type="number" min="1" max="1440" value="30" required placeholder="Duration in minutes">
+              <label class="check-row"><input id="exam-published" type="checkbox"> Publish exam</label>
+              <button class="primary" type="submit">Save exam</button>
             </form>
           </section>
-          <section class="panel"><h4>Exams & Results</h4><div id="admin-exam-list" class="exam-list">Loading...</div></section>
+          <section id="admin-questions-section" class="admin-section panel">
+            <h4>Question Bank</h4>
+            <form id="question-form" class="compact-form">
+              <textarea id="question-text" required placeholder="Question text"></textarea>
+              <div class="option-grid">
+                <input id="option-a" required placeholder="Option A">
+                <input id="option-b" required placeholder="Option B">
+                <input id="option-c" required placeholder="Option C">
+                <input id="option-d" required placeholder="Option D">
+              </div>
+              <select id="correct-option" required><option value="A">Correct: A</option><option value="B">Correct: B</option><option value="C">Correct: C</option><option value="D">Correct: D</option></select>
+              <input id="question-marks" type="number" min="1" value="1" required placeholder="Marks">
+              <button class="primary" type="submit">Add question</button>
+            </form>
+            <div id="question-list" class="exam-list"></div>
+          </section>
+          <section id="admin-monitoring-section" class="admin-section panel">
+            <h4>Live Monitoring</h4><div id="live-monitoring">Loading active attempts...</div>
+          </section>
+          <section id="admin-results-section" class="admin-section panel">
+            <h4>Results</h4>
+            <div class="result-actions"><button id="declare-results" class="secondary" type="button">Declare Results</button><button id="export-results" class="secondary" type="button">Download Excel/CSV</button></div>
+            <div id="results-table"></div>
+          </section>
         </div>
         <div id="exam-screen" class="exam-screen">
           <div class="exam-toolbar"><strong id="exam-running-title"></strong><span id="exam-timer">00:00:00</span></div>
@@ -141,7 +169,8 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="./firebase-config.js"></script>
-  <script src="./app.js"></script>
+  <script src="./app-static.js"></script>
 </body>
 </html>
