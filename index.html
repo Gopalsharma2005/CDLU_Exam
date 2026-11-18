@@ -1,0 +1,87 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CDLU Examination Portal</title>
+  <meta name="description" content="Chaudhary Devi Lal University online examination portal">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <img class="logo" src="./cdlu-logo.png" alt="CDLU logo">
+    <div>
+      <h1 class="university-name">Chaudhary Devi Lal University</h1>
+      <p class="university-subtitle">Digital Examination Portal</p>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="auth-card">
+      <div class="card-head">
+        <h2>Student Portal</h2>
+        <p>Sign in or create a secure student account</p>
+      </div>
+
+      <div id="auth-forms">
+        <nav class="tabs" aria-label="Authentication options">
+          <button class="tab active" type="button" data-tab="login">Login</button>
+          <button class="tab" type="button" data-tab="register">Registration</button>
+        </nav>
+
+        <form id="login-form" class="form active">
+          <div class="field">
+            <label for="login-email">Email address</label>
+            <input id="login-email" type="email" autocomplete="email" required placeholder="student@example.com">
+          </div>
+          <div class="field">
+            <label for="login-password">Password</label>
+            <input id="login-password" type="password" autocomplete="current-password" minlength="6" required placeholder="Enter your password">
+          </div>
+          <button class="primary" type="submit">Sign in</button>
+          <div class="divider">OR</div>
+          <button class="google google-button" type="button">
+            <svg class="g-mark" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.26-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.71-1.58 2.68-3.9 2.68-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.97 10.72A5.4 5.4 0 0 1 3.68 9c0-.6.1-1.18.29-1.72V4.95H.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.05l3.01-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.34l2.58-2.58A8.65 8.65 0 0 0 9 0 9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/></svg>
+            Continue with Google
+          </button>
+        </form>
+
+        <form id="register-form" class="form">
+          <div class="field">
+            <label for="register-name">Full name</label>
+            <input id="register-name" type="text" autocomplete="name" minlength="2" maxlength="100" required placeholder="Your full name">
+          </div>
+          <div class="field">
+            <label for="register-email">Email address</label>
+            <input id="register-email" type="email" autocomplete="email" required placeholder="student@example.com">
+          </div>
+          <div class="field">
+            <label for="register-password">Create password</label>
+            <input id="register-password" type="password" autocomplete="new-password" minlength="6" maxlength="128" required placeholder="At least 6 characters">
+          </div>
+          <button class="primary" type="submit">Create account</button>
+          <div class="divider">OR</div>
+          <button class="google google-button" type="button">
+            <svg class="g-mark" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.26-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.71-1.58 2.68-3.9 2.68-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.97 10.72A5.4 5.4 0 0 1 3.68 9c0-.6.1-1.18.29-1.72V4.95H.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.05l3.01-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.34l2.58-2.58A8.65 8.65 0 0 0 9 0 9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/></svg>
+            Continue with Google
+          </button>
+        </form>
+        <div id="message" class="message" role="alert"></div>
+      </div>
+
+      <div id="user-panel" class="user-panel">
+        <div id="user-avatar" class="avatar">U</div>
+        <h3 id="user-name">CDLU Student</h3>
+        <p id="user-email"></p>
+        <button id="logout-button" class="logout" type="button">Log out</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="./firebase-config.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

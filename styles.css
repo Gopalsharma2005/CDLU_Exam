@@ -1,0 +1,117 @@
+:root {
+  --white: #ffffff;
+  --sky: #dff3ff;
+  --sky-strong: #38bdf8;
+  --sky-deep: #0369a1;
+  --green: #e8f7ed;
+  --green-strong: #86efac;
+  --green-deep: #166534;
+  --text: #17324d;
+  --border: #bde7cc;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  color: var(--text);
+  background: linear-gradient(135deg, var(--white) 0%, var(--sky) 48%, var(--green) 100%);
+}
+button, input { font: inherit; }
+
+.topbar {
+  height: 82px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 24px;
+  background: rgba(255,255,255,.92);
+  border-bottom: 1px solid var(--border);
+}
+.logo { width: 58px; height: 58px; object-fit: contain; }
+.university-name { margin: 0; color: var(--green-deep); font-size: 20px; }
+.university-subtitle { margin: 3px 0 0; color: var(--sky-deep); font-size: 13px; }
+
+.page {
+  min-height: calc(100vh - 82px);
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+}
+.auth-card {
+  width: min(440px, 100%);
+  background: var(--white);
+  border: 1px solid #c8ead4;
+  border-radius: 24px;
+  box-shadow: 0 18px 55px rgba(3,105,161,.12);
+  overflow: hidden;
+}
+.card-head {
+  padding: 24px 28px 18px;
+  background: linear-gradient(135deg, var(--sky), var(--green));
+  border-bottom: 1px solid #ccebd6;
+}
+.card-head h2 { margin: 0 0 5px; font-size: 24px; }
+.card-head p { margin: 0; font-size: 13px; }
+.tabs { display: grid; grid-template-columns: 1fr 1fr; padding: 8px; gap: 8px; background: var(--white); }
+.tab {
+  border: 0;
+  border-radius: 12px;
+  padding: 11px;
+  cursor: pointer;
+  color: var(--text);
+  background: var(--sky);
+  font-weight: 700;
+}
+.tab.active { background: var(--green); color: var(--green-deep); outline: 2px solid var(--green-strong); }
+.form { display: none; padding: 20px 28px 28px; }
+.form.active { display: block; }
+.field { margin-bottom: 14px; }
+.field label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; }
+.field input {
+  width: 100%;
+  border: 1px solid #adddc0;
+  border-radius: 12px;
+  padding: 12px 13px;
+  color: var(--text);
+  background: var(--white);
+  outline: none;
+}
+.field input:focus { border-color: var(--sky-strong); box-shadow: 0 0 0 3px var(--sky); }
+.primary, .google {
+  width: 100%;
+  min-height: 46px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 800;
+}
+.primary { border: 0; color: var(--white); background: var(--sky-deep); }
+.primary:hover { background: #075985; }
+.divider { display: flex; align-items: center; gap: 10px; margin: 16px 0; color: #527487; font-size: 11px; font-weight: 800; }
+.divider::before, .divider::after { content: ""; height: 1px; flex: 1; background: #c9ead5; }
+.google { border: 1px solid #adddc0; background: var(--white); color: var(--text); display: flex; align-items: center; justify-content: center; gap: 9px; }
+.google:hover { background: var(--green); }
+.g-mark { width: 18px; height: 18px; }
+.message { display: none; margin: 0 28px 18px; border-radius: 10px; padding: 11px 12px; font-size: 13px; }
+.message.show { display: block; }
+.message.error { background: #fff1f1; color: #9f1239; border: 1px solid #fecdd3; }
+.message.success { background: var(--green); color: var(--green-deep); border: 1px solid #bbf7d0; }
+.user-panel { display: none; padding: 26px 28px 30px; text-align: center; }
+.user-panel.show { display: block; }
+.avatar { width: 70px; height: 70px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto 12px; background: var(--green); color: var(--green-deep); font-size: 28px; font-weight: 900; }
+.user-panel h3 { margin: 8px 0 4px; }
+.user-panel p { margin: 4px 0 18px; color: #527487; }
+.logout { border: 1px solid #adddc0; border-radius: 12px; padding: 11px 18px; background: var(--sky); color: var(--sky-deep); cursor: pointer; font-weight: 800; }
+button:disabled { opacity: .65; cursor: wait; }
+
+@media (max-width: 600px) {
+  .topbar { height: 74px; padding: 10px 14px; }
+  .logo { width: 52px; height: 52px; }
+  .university-name { font-size: 16px; }
+  .university-subtitle { font-size: 11px; }
+  .page { min-height: calc(100vh - 74px); padding: 18px 12px; align-items: start; }
+  .card-head { padding: 20px; }
+  .form { padding: 18px 20px 22px; }
+  .message { margin-inline: 20px; }
+}
