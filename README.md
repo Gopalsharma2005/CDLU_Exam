@@ -17,8 +17,11 @@ In Firebase Console:
 1. Open **Authentication > Sign-in method**.
 2. Enable **Email/Password**.
 3. Enable **Google**.
-4. Open **Authentication > Settings > Authorized domains**.
-5. Add `localhost` and every deployed domain used for this portal.
+4. Create the single administrator account `admin@cdlu.ac.in` manually in **Authentication > Users**.
+5. Open **Authentication > Settings > Authorized domains**.
+6. Add `localhost` and every deployed domain used for this portal.
+
+The website distinguishes the configured administrator email from student accounts. Students may register with Email/Password or Google. The administrator account cannot be created through registration and receives an administrator dashboard after sign-in.
 
 ## Files
 

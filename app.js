@@ -7,6 +7,11 @@
 
   if (!firebase.apps.length) firebase.initializeApp(config);
   const auth = firebase.auth();
+  const adminEmail = (window.CDLU_ADMIN_EMAIL || '').trim().toLowerCase();
+
+  function isAdminEmail(email) {
+    return Boolean(email) && email.trim().toLowerCase() === adminEmail;
+  }
 
   const loginForm = document.getElementById('login-form');
   const registerForm = document.getElementById('register-form');
@@ -61,8 +66,13 @@
     button.disabled = true;
     try {
       const name = document.getElementById('register-name').value.trim();
+      const email = document.getElementById('register-email').value.trim();
+      if (isAdminEmail(email)) {
+        showMessage('The administrator account can only be created in Firebase Console.', true);
+        return;
+      }
       const credential = await auth.createUserWithEmailAndPassword(
-        document.getElementById('register-email').value.trim(),
+        email,
         document.getElementById('register-password').value
       );
       await credential.user.updateProfile({ displayName: name });
@@ -97,10 +107,16 @@
 
   auth.onAuthStateChanged((user) => {
     if (user) {
+      const isAdmin = isAdminEmail(user.email);
       authForms.style.display = 'none';
       userPanel.classList.add('show');
-      document.getElementById('user-name').textContent = user.displayName || 'CDLU Student';
+      document.getElementById('user-name').textContent = isAdmin
+        ? (user.displayName || 'Portal Administrator')
+        : (user.displayName || 'CDLU Student');
       document.getElementById('user-email').textContent = user.email || '';
+      document.getElementById('user-role').textContent = isAdmin ? 'Administrator' : 'Student';
+      document.getElementById('student-dashboard').style.display = isAdmin ? 'none' : 'grid';
+      document.getElementById('admin-dashboard').style.display = isAdmin ? 'grid' : 'none';
       document.getElementById('user-avatar').textContent = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
     } else {
       authForms.style.display = 'block';
