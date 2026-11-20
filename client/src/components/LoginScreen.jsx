@@ -18,6 +18,7 @@ export default function LoginScreen({ onLoginSuccess, isAdminPortal = false }) {
 
   // Registration state (email and phone are mandatory)
   const [registration, setRegistration] = useState({
+    roll_no: '',
     name: '',
     email: '',
     phone: '',
@@ -26,6 +27,7 @@ export default function LoginScreen({ onLoginSuccess, isAdminPortal = false }) {
     semester: '4th Semester'
   });
   const [colleges, setColleges] = useState([]);
+  const [collegeSearchText, setCollegeSearchText] = useState('');
   const [registrationLoading, setRegistrationLoading] = useState(false);
   const [registrationError, setRegistrationError] = useState('');
 
@@ -104,7 +106,15 @@ export default function LoginScreen({ onLoginSuccess, isAdminPortal = false }) {
   const handleRegistration = async (e) => {
     e.preventDefault();
 
-    // Strict validation: Email and Mobile are MANDATORY
+    // Strict validation: Roll number, email and mobile are mandatory
+    if (!registration.roll_no || !registration.roll_no.trim()) {
+      setRegistrationError('Student roll number is strictly mandatory.');
+      return;
+    }
+    if (!registration.college_id) {
+      setRegistrationError('Please type and select an affiliated college from the list.');
+      return;
+    }
     if (!registration.email || !registration.email.trim()) {
       setRegistrationError('Email address is strictly mandatory.');
       return;
@@ -406,22 +416,48 @@ export default function LoginScreen({ onLoginSuccess, isAdminPortal = false }) {
               />
             </div>
 
+            {/* Roll Number */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                Student Roll Number <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={registration.roll_no}
+                onChange={(e) => setRegistration({ ...registration, roll_no: e.target.value.toUpperCase() })}
+                className="w-full p-2.5 bg-white/70 backdrop-blur-md border border-slate-300 rounded-xl text-sm font-normal focus:bg-white focus:ring-2 focus:ring-sky-500 outline-none"
+                placeholder="e.g. CDLU2026001234"
+                autoComplete="off"
+                maxLength={50}
+                required
+              />
+            </div>
+
             {/* College Selection */}
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1">
-                Select College <span className="text-red-500">*</span>
+                Search and Select College <span className="text-red-500">*</span>
               </label>
-              <select
-                value={registration.college_id}
-                onChange={(e) => setRegistration({ ...registration, college_id: e.target.value })}
-                className="w-full p-2.5 bg-white/70 backdrop-blur-md border border-slate-300 rounded-xl text-sm font-normal focus:bg-white focus:ring-2 focus:ring-sky-500 outline-none cursor-pointer"
+              <input
+                type="text"
+                list="registration-college-options"
+                value={collegeSearchText}
+                onChange={(e) => {
+                  const text = e.target.value;
+                  setCollegeSearchText(text);
+                  const match = colleges.find((college) => college.name.toLowerCase() === text.trim().toLowerCase());
+                  setRegistration({ ...registration, college_id: match ? String(match.id) : '' });
+                }}
+                placeholder="Type to filter colleges"
+                className="w-full p-2.5 bg-white/70 backdrop-blur-md border border-slate-300 rounded-xl text-sm font-normal focus:bg-white focus:ring-2 focus:ring-sky-500 outline-none"
+                autoComplete="off"
                 required
-              >
-                <option value="">Select your affiliated college</option>
-                {colleges.map((college) => (
-                  <option key={college.id} value={college.id}>{college.name}</option>
-                ))}
-              </select>
+              />
+              <datalist id="registration-college-options">
+                {colleges
+                  .filter((college) => college.name.toLowerCase().includes(collegeSearchText.toLowerCase()))
+                  .map((college) => <option key={college.id} value={college.name} />)}
+              </datalist>
             </div>
 
             {/* Course & Semester */}

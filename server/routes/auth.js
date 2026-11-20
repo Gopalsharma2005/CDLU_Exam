@@ -20,7 +20,8 @@ router.get('/registration-options', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
-  const { name, email, phone, college_id, course, semester } = req.body;
+  const { roll_no, name, email, phone, college_id, course, semester } = req.body;
+  const cleanRollNo = typeof roll_no === 'string' ? roll_no.trim().toUpperCase() : '';
   const cleanName = typeof name === 'string' ? name.trim() : '';
   const cleanEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
   const cleanPhone = typeof phone === 'string' ? phone.trim() : '';
@@ -29,6 +30,9 @@ router.post('/register', (req, res) => {
   const cleanSemester = typeof semester === 'string' ? semester.trim() : '';
   const collegeId = Number(college_id);
 
+  if (!cleanRollNo || cleanRollNo.length > 50) {
+    return res.status(400).json({ error: 'Please enter a valid student roll number (up to 50 characters).' });
+  }
   if (!cleanName || cleanName.length > 100) {
     return res.status(400).json({ error: 'Please enter your name (up to 100 characters).' });
   }
@@ -71,12 +75,18 @@ router.post('/register', (req, res) => {
         throw error;
       }
 
-      const temporaryUsername = `REG-${crypto.randomUUID()}`;
+      const existingRollNo = db.prepare('SELECT id FROM users WHERE LOWER(username) = LOWER(?)').get(cleanRollNo);
+      if (existingRollNo) {
+        const error = new Error('This student roll number is already registered. Contact your college administrator.');
+        error.statusCode = 409;
+        throw error;
+      }
+
       const insert = db.prepare(`
         INSERT INTO users (username, password, role, name, email, phone, college_id, course, semester, status)
         VALUES (?, ?, 'student', ?, ?, ?, ?, ?, ?, 'active')
       `).run(
-        temporaryUsername,
+        cleanRollNo,
         bcrypt.hashSync(crypto.randomBytes(32).toString('hex'), 10),
         cleanName,
         cleanEmail,
@@ -86,9 +96,7 @@ router.post('/register', (req, res) => {
         cleanSemester
       );
 
-      const studentId = `CDLU${new Date().getFullYear()}${String(insert.lastInsertRowid).padStart(6, '0')}`;
-      db.prepare('UPDATE users SET username = ? WHERE id = ?').run(studentId, insert.lastInsertRowid);
-      return { id: insert.lastInsertRowid, studentId };
+      return { id: insert.lastInsertRowid, studentId: cleanRollNo };
     })();
 
     const registeredUser = {

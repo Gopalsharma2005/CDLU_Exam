@@ -40,7 +40,7 @@ export default function AdminPortal({ user }) {
 
   // Forms
   const [newCollege, setNewCollege] = useState({ code: '', name: '', city: 'Sirsa', email: '', phone: '', adminEmail: '', adminPassword: '' });
-  const [newStudent, setNewStudent] = useState({ student_id: '', name: '', email: '', phone: '', college_id: user.college_id || '', course: 'BCA', semester: '4th Semester', password: 'Student@123' });
+  const [newStudent, setNewStudent] = useState({ student_id: '', name: '', email: '', phone: '', college_id: user.college_id || '', college_search: '', course: 'BCA', semester: '4th Semester', password: 'Student@123' });
   const [newExam, setNewExam] = useState({
     code: '',
     title: '',
@@ -55,6 +55,7 @@ export default function AdminPortal({ user }) {
     end_window: ''
   });
   const [newQuestion, setNewQuestion] = useState({ question_text: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_option: 'A', marks: 2, explanation: '' });
+  const [collegeImportText, setCollegeImportText] = useState('');
 
   // Filters for results & students
   const [resultFilterCollege, setResultFilterCollege] = useState('');
@@ -224,6 +225,36 @@ export default function AdminPortal({ user }) {
     }
   };
 
+  const handleImportColleges = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!/\.(xlsx|xls|csv)$/i.test(file.name)) {
+      notify('Please upload an Excel (.xlsx or .xls) or CSV file.', 'error');
+      e.target.value = '';
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await apiFetch('/api/colleges/import', {
+        method: 'POST',
+        headers: { 'Authorization': `******'cdlu_token')}` },
+        body: formData
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'College import failed');
+      setCollegeImportText(data.message);
+      notify(data.message);
+      fetchColleges();
+      fetchDashboardStats();
+    } catch (err) {
+      notify(err.message, 'error');
+    } finally {
+      e.target.value = '';
+    }
+  };
+
   const handleCreateStudent = async (e) => {
     e.preventDefault();
     try {
@@ -239,7 +270,7 @@ export default function AdminPortal({ user }) {
       if (!res.ok) throw new Error(data.error || 'Failed to add student');
       notify(`Student ${newStudent.student_id} registered successfully!`);
       setShowAddStudentModal(false);
-      setNewStudent({ student_id: '', name: '', email: '', phone: '', college_id: user.college_id || '', course: 'BCA', semester: '4th Semester', password: 'Student@123' });
+      setNewStudent({ student_id: '', name: '', email: '', phone: '', college_id: user.college_id || '', college_search: '', course: 'BCA', semester: '4th Semester', password: 'Student@123' });
       fetchStudents();
       fetchDashboardStats();
     } catch (err) {
@@ -551,13 +582,20 @@ export default function AdminPortal({ user }) {
               <h3 className="text-base font-bold text-slate-900">Affiliated Colleges & Exam Centers</h3>
               <p className="text-xs text-slate-500">Manage participating colleges and center credentials</p>
             </div>
-            <button
-              onClick={() => setShowAddCollegeModal(true)}
-              className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-sm"
-            >
-              <Plus className="w-4 h-4 text-sky-400" />
-              <span>Add College</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <label className="px-3 py-2 rounded-xl bg-sky-700 hover:bg-sky-800 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-sm">
+                <FileSpreadsheet className="w-4 h-4" />
+                <span>Upload Excel</span>
+                <input type="file" accept=".xlsx,.xls,.csv" onChange={handleImportColleges} className="hidden" />
+              </label>
+              <button
+                onClick={() => setShowAddCollegeModal(true)}
+                className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-sm"
+              >
+                <Plus className="w-4 h-4 text-sky-400" />
+                <span>Add College</span>
+              </button>
+            </div>
           </div>
 
           <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
@@ -1291,15 +1329,22 @@ export default function AdminPortal({ user }) {
               {isSuper && (
                 <div>
                   <label className="font-bold text-slate-700 block mb-1">Assigned College</label>
-                  <select
-                    value={newStudent.college_id}
-                    onChange={(e) => setNewStudent({ ...newStudent, college_id: e.target.value })}
+                  <input
+                    type="text"
+                    list="admin-college-options"
+                    value={newStudent.college_search}
+                    onChange={(e) => {
+                      const text = e.target.value;
+                      const match = colleges.find((college) => college.name.toLowerCase() === text.trim().toLowerCase());
+                      setNewStudent({ ...newStudent, college_search: text, college_id: match ? String(match.id) : '' });
+                    }}
+                    placeholder="Type to search college"
                     className="w-full p-2.5 border border-slate-300 rounded-xl bg-white"
                     required
-                  >
-                    <option value="">Select College</option>
-                    {colleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                  </select>
+                  />
+                  <datalist id="admin-college-options">
+                    {colleges.map((college) => <option key={college.id} value={college.name} />)}
+                  </datalist>
                 </div>
               )}
 

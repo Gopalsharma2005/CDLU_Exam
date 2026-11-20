@@ -1,8 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const multer = require('multer');
+const XLSX = require('xlsx');
 const { db } = require('../db');
 const { verifyToken, requireSuperAdmin, requireCollegeAdminOrSuper } = require('../middleware/auth');
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const name = (file.originalname || '').toLowerCase();
+    cb(null, name.endsWith('.xlsx') || name.endsWith('.xls') || name.endsWith('.csv'));
+  }
+});
 
 // Get all colleges
 router.get('/', verifyToken, requireCollegeAdminOrSuper, (req, res) => {
@@ -75,6 +86,64 @@ router.post('/', verifyToken, requireSuperAdmin, (req, res) => {
     if (err.message.includes('UNIQUE constraint failed')) {
       return res.status(400).json({ error: 'College code already exists. Please choose a unique code.' });
     }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Import colleges from Excel/CSV: duplicate names are ignored and new names are inserted automatically
+router.post('/import', verifyToken, requireSuperAdmin, upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'Please upload a valid Excel (.xlsx/.xls) or CSV file.' });
+  }
+
+  try {
+    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    if (!worksheet) return res.status(400).json({ error: 'The uploaded file has no worksheet.' });
+
+    const rows = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+    const findHeader = (row, names) => {
+      const keys = Object.keys(row);
+      const match = keys.find((key) => names.includes(String(key).trim().toLowerCase().replace(/[_-]+/g, ' ')));
+      return match ? row[match] : '';
+    };
+
+    const insertCollege = db.prepare(`
+      INSERT INTO colleges (code, name, city, state, status)
+      VALUES (?, ?, 'Sirsa', 'Haryana', 'active')
+    `);
+    const existingByName = db.prepare('SELECT id, name FROM colleges').all();
+    const existingNames = new Set(existingByName.map((college) => college.name.trim().toLowerCase()));
+
+    let imported = 0;
+    let duplicates = 0;
+    db.transaction(() => {
+      for (const row of rows) {
+        const name = String(findHeader(row, ['college name', 'college', 'name']) || '').trim();
+        if (!name) continue;
+
+        const normalized = name.toLowerCase();
+        if (existingNames.has(normalized)) {
+          duplicates++;
+          continue;
+        }
+
+        const srNo = String(findHeader(row, ['sr no', 'srno', 'serial no', 's no']) || '').trim();
+        const codeBase = name.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toUpperCase().slice(0, 30);
+        let code = codeBase || `COLLEGE-${srNo || imported + 1}`;
+        let suffix = 1;
+        while (db.prepare('SELECT id FROM colleges WHERE LOWER(code) = LOWER(?)').get(code)) {
+          code = `${codeBase}-${++suffix}`;
+        }
+
+        insertCollege.run(code, name);
+        existingNames.add(normalized);
+        imported++;
+      }
+    })();
+
+    res.json({ message: `Import complete: ${imported} college(s) added, ${duplicates} duplicate(s) skipped.`, imported, duplicates });
+  } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
