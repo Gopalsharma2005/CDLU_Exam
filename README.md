@@ -11,6 +11,11 @@ npm start
 
 The student portal will open at `http://localhost:5000/`. Authorized administrators can use the separate admin page at `http://localhost:5000/admin.html`.
 
+When opening the standalone pages through a static server such as VS Code Live Server
+(`http://127.0.0.1:5500`), the portal automatically uses its browser-based offline
+database if the backend API is unavailable. For production, set `VITE_API_BASE_URL`
+to the deployed server URL before building the frontend.
+
 ## Features
 
 - Student registration and student login

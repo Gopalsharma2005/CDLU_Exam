@@ -29,9 +29,15 @@ export async function apiFetch(url, options = {}) {
     });
     if (timeoutId) clearTimeout(timeoutId);
 
-    if (response.status !== 404 && response.status !== 502) {
+    const contentType = response.headers.get('content-type') || '';
+    const isJsonResponse = contentType.toLowerCase().includes('application/json');
+
+    if (response.status !== 404 && response.status !== 502 && isJsonResponse) {
       return response;
     }
+
+    // Static hosts often return index.html with HTTP 200 for unknown /api paths.
+    // Treat that response like an unavailable API so standalone pages use offline mode.
     return handleOfflineApi(url, options);
   } catch {
     // If server is offline or running from file://, handle completely in browser
