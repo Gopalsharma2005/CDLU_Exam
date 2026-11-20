@@ -20,7 +20,7 @@ router.get('/registration-options', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
-  const { name, email, phone, college_id, course, semester, password } = req.body;
+  const { name, email, phone, college_id, course, semester } = req.body;
   const cleanName = typeof name === 'string' ? name.trim() : '';
   const cleanEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
   const cleanPhone = typeof phone === 'string' ? phone.trim() : '';
@@ -41,10 +41,6 @@ router.post('/register', (req, res) => {
   if (!Number.isSafeInteger(collegeId) || collegeId < 1 || !cleanCourse || !cleanSemester) {
     return res.status(400).json({ error: 'College, course and semester are required.' });
   }
-  if (typeof password !== 'string' || password.length < 8 || password.length > 128) {
-    return res.status(400).json({ error: 'Set a password between 8 and 128 characters.' });
-  }
-
   try {
     const college = db.prepare(`
       SELECT id FROM colleges WHERE id = ? AND status = 'active'
@@ -81,7 +77,7 @@ router.post('/register', (req, res) => {
         VALUES (?, ?, 'student', ?, ?, ?, ?, ?, ?, 'active')
       `).run(
         temporaryUsername,
-        bcrypt.hashSync(password, 10),
+        bcrypt.hashSync(crypto.randomBytes(32).toString('hex'), 10),
         cleanName,
         cleanEmail,
         normalizedPhone,
@@ -95,12 +91,10 @@ router.post('/register', (req, res) => {
       return { id: insert.lastInsertRowid, studentId };
     })();
 
-    res.status(201).json({
-      message: 'Student registration successful.',
-      studentId: student.studentId,
-      student: {
+    const registeredUser = {
         id: student.id,
         username: student.studentId,
+        role: 'student',
         name: cleanName,
         email: cleanEmail,
         phone: normalizedPhone,
@@ -108,7 +102,14 @@ router.post('/register', (req, res) => {
         course: cleanCourse,
         semester: cleanSemester,
         status: 'active'
-      }
+    };
+
+    res.status(201).json({
+      message: 'Student registration successful. Examination session started.',
+      token: generateToken(registeredUser),
+      studentId: student.studentId,
+      user: registeredUser,
+      student: registeredUser
     });
   } catch (err) {
     if (err.statusCode === 409) {

@@ -93,7 +93,13 @@ export function handleOfflineApi(rawUrl, options = {}) {
     };
     db.users.push(newUser);
     saveDb(db);
-    return jsonResponse({ message: 'Student registration successful.', studentId, student: newUser }, 201);
+    return jsonResponse({
+      message: 'Student registration successful. Examination session started.',
+      token: `token-${newUser.id}`,
+      studentId,
+      user: newUser,
+      student: newUser
+    }, 201);
   }
 
   // 4. Auth: Login
@@ -543,4 +549,3 @@ export function handleOfflineApi(rawUrl, options = {}) {
   // Fallback default
   return jsonResponse({ error: 'Endpoint not found', offline: true }, 404);
 }
-

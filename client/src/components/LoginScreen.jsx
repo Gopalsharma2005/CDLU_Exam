@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import {
   Lock, User, ArrowRight, ShieldCheck, AlertCircle, Smartphone,
-  CheckCircle2, Home, Building2, Shield, Mail, Phone, BookOpen,
+  Building2, Shield, Mail, Phone, BookOpen,
   School, Clock, Award, Check
 } from 'lucide-react';
 import { apiFetch } from '../api';
 
 export default function LoginScreen({ onLoginSuccess, isAdminPortal = false }) {
   const showDemoLogin = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_LOGIN === 'true';
-  const [activeTab, setActiveTab] = useState(isAdminPortal ? 'officer' : 'home'); // 'home' | 'register' | 'officer'
+  const [activeTab, setActiveTab] = useState(isAdminPortal ? 'officer' : 'register'); // 'home' | 'register' | 'officer'
 
   // Form states
   const [username, setUsername] = useState('');
@@ -23,13 +23,11 @@ export default function LoginScreen({ onLoginSuccess, isAdminPortal = false }) {
     phone: '',
     college_id: '',
     course: 'BCA',
-    semester: '4th Semester',
-    password: ''
+    semester: '4th Semester'
   });
   const [colleges, setColleges] = useState([]);
   const [registrationLoading, setRegistrationLoading] = useState(false);
   const [registrationError, setRegistrationError] = useState('');
-  const [registeredStudentId, setRegisteredStudentId] = useState('');
 
   useEffect(() => {
     if (activeTab !== 'register') return;
@@ -123,8 +121,6 @@ export default function LoginScreen({ onLoginSuccess, isAdminPortal = false }) {
 
     setRegistrationLoading(true);
     setRegistrationError('');
-    setRegisteredStudentId('');
-
     try {
       const res = await apiFetch('/api/auth/register', {
         method: 'POST',
@@ -134,10 +130,10 @@ export default function LoginScreen({ onLoginSuccess, isAdminPortal = false }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Student registration failed.');
 
-      setRegisteredStudentId(data.studentId);
-      setUsername(data.studentId);
-      setPassword('');
-      setRegistration((current) => ({ ...current, password: '' }));
+      if (!data.token || !data.user) {
+        throw new Error('Registration succeeded, but the examination session could not be started.');
+      }
+      onLoginSuccess(data.token, data.user);
     } catch (err) {
       setRegistrationError(err.message || 'Student registration failed.');
     } finally {
@@ -157,19 +153,6 @@ export default function LoginScreen({ onLoginSuccess, isAdminPortal = false }) {
         className="w-full max-w-xl flex flex-wrap sm:flex-nowrap gap-1.5 p-1.5 mb-6 rounded-2xl bg-white/70 backdrop-blur-xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.06)] z-10"
         aria-label="Student Portal Navigation Tabs"
       >
-        <button
-          type="button"
-          onClick={() => handleTabSwitch('home')}
-          className={`flex-1 min-w-[110px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer ${
-            activeTab === 'home'
-              ? 'bg-slate-900 text-sky-400 shadow-md shadow-slate-900/20 scale-[1.02]'
-              : 'text-slate-700 hover:text-sky-950 hover:bg-white/70'
-          }`}
-        >
-          <Home className="w-4 h-4 text-sky-500" />
-          <span>Student Login</span>
-        </button>
-
         <button
           type="button"
           onClick={() => handleTabSwitch('register')}
@@ -361,30 +344,6 @@ export default function LoginScreen({ onLoginSuccess, isAdminPortal = false }) {
               </div>
             )}
 
-            {registeredStudentId && (
-              <div className="p-4 bg-green-50/90 border border-green-300 rounded-2xl text-sm text-green-900 shadow-sm animate-scale-up">
-                <div className="flex items-center gap-2 font-bold text-green-800">
-                  <CheckCircle2 className="w-5 h-5 text-green-600" />
-                  <span>Registration Successful!</span>
-                </div>
-                <p className="mt-2 text-xs text-green-800">Your generated Student ID is:</p>
-                <p className="mt-1 text-2xl font-black tracking-wider text-green-950 font-mono">
-                  {registeredStudentId}
-                </p>
-                <p className="text-[11px] text-green-700 mt-1">
-                  Save this ID and your password. Use it to log in and take your examination.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => handleTabSwitch('home')}
-                  className="mt-3 px-4 py-2 bg-green-700 hover:bg-green-800 text-white rounded-xl text-xs font-bold transition cursor-pointer inline-flex items-center gap-1.5 shadow"
-                >
-                  <span>Go to Student Login Desk</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            )}
-
             {/* Full Name */}
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1">
@@ -489,30 +448,12 @@ export default function LoginScreen({ onLoginSuccess, isAdminPortal = false }) {
               </div>
             </div>
 
-            {/* Password */}
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                Create Examination Password <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="password"
-                value={registration.password}
-                onChange={(e) => setRegistration({ ...registration, password: e.target.value })}
-                className="w-full p-2.5 bg-white/70 backdrop-blur-md border border-slate-300 rounded-xl text-sm font-normal focus:bg-white focus:ring-2 focus:ring-sky-500 outline-none"
-                placeholder="At least 8 characters"
-                autoComplete="new-password"
-                minLength={8}
-                maxLength={128}
-                required
-              />
-            </div>
-
             <button
               type="submit"
-              disabled={registrationLoading || Boolean(registeredStudentId)}
+              disabled={registrationLoading}
               className="w-full mt-2 py-3 px-4 rounded-xl font-bold text-sm text-sky-950 bg-gradient-to-r from-sky-400 via-sky-500 to-sky-400 hover:from-sky-500 hover:to-sky-500 shadow-md shadow-sky-500/25 disabled:opacity-50 transition cursor-pointer"
             >
-              {registrationLoading ? 'Generating Student ID...' : 'Register and Generate Student ID'}
+              {registrationLoading ? 'Starting Examination Session...' : 'Register and Start Examination'}
             </button>
           </form>
         )}

@@ -18,9 +18,11 @@ to the deployed server URL before building the frontend.
 
 ## Features
 
-- Student registration and student login
+- One-time student registration and examination access
 - University and college administrator login
 - Separate student (`index.html`) and administrator (`admin.html`) portal entry points
+- One-time student registration automatically starts the examination session
+- Student access is deactivated after examination submission
 - Server-authoritative examination timers
 - Automatic answer saving
 - Single-attempt locking
