@@ -9,12 +9,13 @@ npm run setup
 npm start
 ```
 
-The portal will open at `http://localhost:5000`.
+The student portal will open at `http://localhost:5000/`. Authorized administrators can use the separate admin page at `http://localhost:5000/admin.html`.
 
 ## Features
 
 - Student registration and student login
 - University and college administrator login
+- Separate student (`index.html`) and administrator (`admin.html`) portal entry points
 - Server-authoritative examination timers
 - Automatic answer saving
 - Single-attempt locking

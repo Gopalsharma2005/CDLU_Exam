@@ -7,6 +7,10 @@ import { apiFetch } from './api';
 import { School, ShieldCheck, Mail, Phone, MapPin, Award, BookOpen, Clock } from 'lucide-react';
 
 export default function App() {
+  const isAdminRoute =
+    window.location.pathname === '/admin' ||
+    window.location.pathname.startsWith('/admin/') ||
+    window.location.pathname.endsWith('/admin.html');
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(() => {
     const handoffToken = new URLSearchParams(window.location.hash.slice(1)).get('session');
@@ -75,19 +79,23 @@ export default function App() {
     );
   }
 
+  const isAdmin = ['college_admin', 'examiner', 'super_admin'].includes(user?.role);
+  const hasPortalAccess = user && (isAdminRoute ? isAdmin : user.role === 'student');
+  const visibleUser = hasPortalAccess ? user : null;
+
   return (
     <div className="min-h-screen bg-sky-50 flex flex-col font-sans relative selection:bg-sky-500 selection:text-sky-950">
       {/* University header */}
-      <BannerHeader user={user} onLogout={handleLogout} />
+      <BannerHeader user={visibleUser} onLogout={handleLogout} />
 
       {/* Main Viewport */}
       <main className="flex-1">
-        {!user ? (
-          <LoginScreen onLoginSuccess={handleLoginSuccess} />
-        ) : user.role === 'student' ? (
-          <StudentPortal user={user} onLogout={handleLogout} />
+        {!visibleUser ? (
+          <LoginScreen isAdminPortal={isAdminRoute} onLoginSuccess={handleLoginSuccess} />
+        ) : visibleUser.role === 'student' ? (
+          <StudentPortal user={visibleUser} onLogout={handleLogout} />
         ) : (
-          <AdminPortal user={user} />
+          <AdminPortal user={visibleUser} />
         )}
       </main>
 

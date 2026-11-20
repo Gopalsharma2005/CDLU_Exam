@@ -51,15 +51,15 @@ if (fs.existsSync(logoPath)) {
   jsContent = jsContent.replaceAll('/cdlu-logo.png', logoBase64);
 }
 
-// 4. Build completely self-contained index.html (runs directly via file://, double-click, or web server)
-const standaloneHtml = `<!doctype html>
+// 4. Build completely self-contained pages (runs directly via file://, double-click, or web server)
+const createStandaloneHtml = (title, description) => `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>CDLU Digital Examination Portal</title>
-    <meta name="description" content="Chaudhary Devi Lal University, Sirsa - Secure Digital Examination Portal" />
+    <title>${title}</title>
+    <meta name="description" content="${description}" />
     <style>
 ${cssContent}
     </style>
@@ -73,5 +73,15 @@ ${jsContent}
 </html>
 `;
 
-fs.writeFileSync(path.join(rootDir, 'index.html'), standaloneHtml, 'utf8');
-console.log('[sync-root] Successfully generated standalone index.html (runs directly when double-clicked!).');
+const studentHtml = createStandaloneHtml(
+  'CDLU Digital Examination Portal',
+  'Chaudhary Devi Lal University, Sirsa - Secure Digital Examination Portal'
+);
+const adminHtml = createStandaloneHtml(
+  'CDLU Admin Examination Portal',
+  'Chaudhary Devi Lal University, Sirsa - Authorized Administrator Portal'
+);
+
+fs.writeFileSync(path.join(rootDir, 'index.html'), studentHtml, 'utf8');
+fs.writeFileSync(path.join(rootDir, 'admin.html'), adminHtml, 'utf8');
+console.log('[sync-root] Generated standalone index.html and admin.html.');

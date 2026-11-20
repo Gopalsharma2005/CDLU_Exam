@@ -6,9 +6,9 @@ import {
 } from 'lucide-react';
 import { apiFetch } from '../api';
 
-export default function LoginScreen({ onLoginSuccess }) {
+export default function LoginScreen({ onLoginSuccess, isAdminPortal = false }) {
   const showDemoLogin = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_LOGIN === 'true';
-  const [activeTab, setActiveTab] = useState('home'); // 'home' | 'register' | 'officer'
+  const [activeTab, setActiveTab] = useState(isAdminPortal ? 'officer' : 'home'); // 'home' | 'register' | 'officer'
 
   // Form states
   const [username, setUsername] = useState('');
@@ -82,10 +82,10 @@ export default function LoginScreen({ onLoginSuccess }) {
       }
 
       // Admin Login supports both university and college administrators.
-      if (activeTab === 'officer' && !['college_admin', 'examiner', 'super_admin'].includes(data.user?.role)) {
+      if (isAdminPortal && !['college_admin', 'examiner', 'super_admin'].includes(data.user?.role)) {
         throw new Error('This sign-in is for authorized university and college administrators only.');
       }
-      if (activeTab === 'home' && data.user?.role !== 'student') {
+      if (!isAdminPortal && data.user?.role !== 'student') {
         throw new Error('Please use Admin Login for an administrator account.');
       }
 
@@ -153,9 +153,9 @@ export default function LoginScreen({ onLoginSuccess }) {
       <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-green-400/20 rounded-full blur-3xl pointer-events-none"></div>
 
       {/* 1. TOP TRANSPARENT NAVIGATION TABS */}
-      <nav
+      {!isAdminPortal && <nav
         className="w-full max-w-xl flex flex-wrap sm:flex-nowrap gap-1.5 p-1.5 mb-6 rounded-2xl bg-white/70 backdrop-blur-xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.06)] z-10"
-        aria-label="Portal Navigation Tabs"
+        aria-label="Student Portal Navigation Tabs"
       >
         <button
           type="button"
@@ -182,20 +182,7 @@ export default function LoginScreen({ onLoginSuccess }) {
           <User className="w-4 h-4 text-green-500" />
           <span>Student Registration</span>
         </button>
-
-        <button
-          type="button"
-          onClick={() => handleTabSwitch('officer')}
-          className={`flex-1 min-w-[110px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer ${
-            activeTab === 'officer'
-              ? 'bg-slate-900 text-sky-400 shadow-md shadow-slate-900/20 scale-[1.02]'
-              : 'text-slate-700 hover:text-sky-950 hover:bg-white/70'
-          }`}
-        >
-          <Shield className="w-4 h-4 text-red-500" />
-          <span>Admin Login</span>
-        </button>
-      </nav>
+      </nav>}
 
       {/* 2. CENTRAL GLASSMORPHISM CARD */}
       <div className="w-full max-w-xl bg-white/75 backdrop-blur-2xl rounded-3xl shadow-[0_20px_60px_rgba(15,23,42,0.1)] border border-white/80 overflow-hidden transition-all duration-300 z-10">
