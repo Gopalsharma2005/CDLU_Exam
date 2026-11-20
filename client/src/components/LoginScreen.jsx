@@ -426,7 +426,7 @@ export default function LoginScreen({ onLoginSuccess, isAdminPortal = false }) {
                 value={registration.roll_no}
                 onChange={(e) => setRegistration({ ...registration, roll_no: e.target.value.toUpperCase() })}
                 className="w-full p-2.5 bg-white/70 backdrop-blur-md border border-slate-300 rounded-xl text-sm font-normal focus:bg-white focus:ring-2 focus:ring-sky-500 outline-none"
-                placeholder="e.g. CDLU2026001234"
+                placeholder="e.g. 25111116850076"
                 autoComplete="off"
                 maxLength={50}
                 required
